@@ -140,6 +140,32 @@ public class ProductosDAO {
         }
     }
 }
-
+    public Productos BuscarPro(String cod) {
+    Productos producto = null; // Inicializar como null para manejar correctamente cuando no se encuentra el producto
+    String sql = "SELECT * FROM stock WHERE codigo = ?";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, cod);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            producto = new Productos(); // Inicializar el producto cuando se encuentra un registro
+            producto.setNombre(rs.getString("nombre"));
+            producto.setStock(rs.getInt("stock"));
+            producto.setPreventa(rs.getDouble("precio de venta")); // Asegúrate de que este nombre es correcto
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    return producto;
+}
 }
 
