@@ -34,8 +34,8 @@ public class ProductosDAO {
              ps.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime la pila de excepciones para ayudar en la depuración
-            return false; // Retorna false si hay una excepción
+            e.printStackTrace(); 
+            return false; 
         } finally {
             try {
                 if (ps != null) ps.close();
@@ -76,14 +76,14 @@ public class ProductosDAO {
         return listaPro;
     }
     public boolean eliminarProducto(int id) {
-    // Define la consulta SQL para eliminar un producto según su ID.
+    // Defino la consulta SQL para eliminar un producto según su ID.
     String sql = "DELETE FROM stock WHERE id=?";
     try {
-        // Obtiene la conexión a la base de datos.
+        // conecto a la base de datos.
         con = cn.getConnection();
-        // Prepara la consulta SQL con el parámetro ID.
+        // Preparo consulta SQL con el parámetro ID.
         ps = con.prepareStatement(sql);
-        // Establece el valor del parámetro ID en la consulta preparada.
+        // Establesco valor del parámetro ID en la consulta preparada.
         ps.setInt(1, id);
         // Ejecuta la consulta SQL.
         ps.execute();
@@ -106,42 +106,32 @@ public class ProductosDAO {
     }
 }
     public boolean modificarProducto(Productos producto) {
-    // Define la consulta SQL para actualizar un producto según su ID.
     String sql = "UPDATE stock SET nombre=?, stock=?, `precio de compra`=?, `precio de venta`=?, codigo=? WHERE id=?";
     try {
-        // Obtiene la conexión a la base de datos.
         con = cn.getConnection();
-        // Prepara la consulta SQL con los parámetros.
         ps = con.prepareStatement(sql);
-        // Establece los valores de los parámetros en la consulta preparada.
         ps.setString(1, producto.getNombre());
         ps.setInt(2, producto.getStock());
         ps.setDouble(3, producto.getPrecompra());
         ps.setDouble(4, producto.getPreventa());
         ps.setString(5, producto.getCodigo());
         ps.setInt(6, producto.getId());
-        // Ejecuta la consulta SQL.
         ps.executeUpdate();
-        // Si la ejecución es exitosa, retorna true.
         return true;
     } catch (SQLException e) {
-        // Si ocurre una excepción SQL, imprime el error y retorna false.
         e.printStackTrace();
         return false;
     } finally {
         try {
-            // Cierra el PreparedStatement si no es nulo.
             if (ps != null) ps.close();
-            // Cierra la conexión si no es nula.
             if (con != null) con.close();
         } catch (SQLException ex) {
-            // Si ocurre una excepción al cerrar recursos, imprime el error.
             ex.printStackTrace();
         }
     }
 }
     public Productos BuscarPro(String cod) {
-    Productos producto = null; // Inicializar como null para manejar correctamente cuando no se encuentra el producto
+    Productos producto = null; // Inicio como null para manejar correctamente cuando no se encuentra el producto
     String sql = "SELECT * FROM stock WHERE codigo = ?";
     try {
         con = cn.getConnection();
@@ -152,7 +142,7 @@ public class ProductosDAO {
             producto = new Productos(); // Inicializar el producto cuando se encuentra un registro
             producto.setNombre(rs.getString("nombre"));
             producto.setStock(rs.getInt("stock"));
-            producto.setPreventa(rs.getDouble("precio de venta")); // Asegúrate de que este nombre es correcto
+            producto.setPreventa(rs.getDouble("precio de venta")); 
         }
     } catch (SQLException e) {
         e.printStackTrace();

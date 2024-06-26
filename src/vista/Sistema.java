@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import modelo.ClienteDAO;
 import modelo.Productos;
 import modelo.ProductosDAO;
+import modelo.Venta;
+import modelo.VentaDAO;
 import modelo.cliente;
 import reportes.Excel;
 /**
@@ -25,6 +27,8 @@ public class Sistema extends javax.swing.JFrame {
     ClienteDAO cliente = new ClienteDAO();
     Productos pro = new Productos();
     ProductosDAO proDAO = new ProductosDAO();
+    Venta venta = new Venta();
+    VentaDAO ventaDAO= new VentaDAO();
     DefaultTableModel modelo = new DefaultTableModel();
     public Sistema() {
         initComponents();
@@ -132,9 +136,10 @@ public void ListarProductos() {
         LabelTotal = new javax.swing.JLabel();
         txtTelefonoClienteVentanva = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        txtIdPro = new javax.swing.JTextField();
         txtNomProVentanva = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtDireVentanva = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -286,10 +291,10 @@ public void ListarProductos() {
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(206, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, 550));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 240, 640));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/images.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 320, 120));
@@ -363,10 +368,15 @@ public void ListarProductos() {
                 txtDNIVentanvaActionPerformed(evt);
             }
         });
+        txtDNIVentanva.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDNIVentanvaKeyPressed(evt);
+            }
+        });
 
         jLabel20.setText("DNI");
 
-        jLabel9.setText("NOMBRE");
+        jLabel9.setText("Nombre");
 
         jLabel6.setText("Total a pagar : ");
 
@@ -383,6 +393,15 @@ public void ListarProductos() {
 
         jLabel32.setText("Producto");
 
+        jLabel33.setText("Direccion");
+
+        txtDireVentanva.setEditable(false);
+        txtDireVentanva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDireVentanvaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -390,58 +409,61 @@ public void ListarProductos() {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(17, 17, 17)
-                                    .addComponent(jLabel8)
-                                    .addGap(58, 58, 58)
-                                    .addComponent(jLabel32)
-                                    .addGap(58, 58, 58)
-                                    .addComponent(jLabel11)
-                                    .addGap(55, 55, 55)
-                                    .addComponent(jLabel12)
-                                    .addGap(67, 67, 67)
-                                    .addComponent(jLabel13))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(txtIdPro, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(392, 392, 392)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(btnImprimirVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel6))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(LabelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtNomProVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtCantidadVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtPrecioVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtStockVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnEliminarVentanva)))
-                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jLabel20)
-                                .addGap(69, 69, 69)
-                                .addComponent(jLabel9)
+                        .addComponent(jLabel20)
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel9)
+                        .addGap(55, 55, 55)
+                        .addComponent(jLabel14)
+                        .addGap(309, 309, 309))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel8)
+                                .addGap(58, 58, 58)
+                                .addComponent(jLabel32)
+                                .addGap(58, 58, 58)
+                                .addComponent(jLabel11)
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel12)
                                 .addGap(67, 67, 67)
-                                .addComponent(jLabel14))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtDNIVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(txtNombreVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel13))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtTelefonoClienteVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(268, 268, 268)))
+                                .addComponent(txtNomProVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtCantidadVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtPrecioVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtStockVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnEliminarVentanva))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(txtDNIVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtNombreVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtTelefonoClienteVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel33))
+                                    .addComponent(txtDireVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(40, 40, 40)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(LabelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(btnImprimirVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 38, Short.MAX_VALUE)))
                 .addGap(441, 441, 441))
         );
         jPanel2Layout.setVerticalGroup(
@@ -473,24 +495,22 @@ public void ListarProductos() {
                             .addComponent(jLabel14)
                             .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDNIVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtNombreVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtTelefonoClienteVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDNIVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelefonoClienteVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel33)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtDireVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(LabelTotal))))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(txtIdPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(LabelTotal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnImprimirVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Nueva Venta", jPanel2);
@@ -906,7 +926,7 @@ public void ListarProductos() {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Cliente", "Nombre de producto", "Cantidad de la compra", "Suma total"
+                "Codigo", "Cliente", "Producto", "Cantidad", "Suma total"
             }
         ));
         jScrollPane4.setViewportView(TableVentas);
@@ -932,20 +952,22 @@ public void ListarProductos() {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(btnPDFVentas)
-                        .addGap(31, 31, 31)
+                        .addComponent(btnPDFVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtIdVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(420, Short.MAX_VALUE))
+                .addContainerGap(348, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPDFVentas)
-                    .addComponent(txtIdVentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(txtIdVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(119, Short.MAX_VALUE))
@@ -1053,25 +1075,9 @@ public void ListarProductos() {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void btnEliminarVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarVentanvaActionPerformed
-
-    private void btnImprimirVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnImprimirVentanvaActionPerformed
-
     private void txtTelefonoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoClienteActionPerformed
-
-    private void txtNombreVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreVentanvaActionPerformed
-
-    private void txtDNIVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDNIVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDNIVentanvaActionPerformed
 
     private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
     // Verifica si el campo de ID del cliente está vacío
@@ -1226,10 +1232,6 @@ public void ListarProductos() {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPDFVentasActionPerformed
 
-    private void txtTelefonoClienteVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefonoClienteVentanvaActionPerformed
-
     private void txtIdClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdClienteActionPerformed
@@ -1237,10 +1239,6 @@ public void ListarProductos() {
     private void txtDNIClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDNIClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDNIClienteActionPerformed
-
-    private void txtPrecioVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioVentanvaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPrecioVentanvaActionPerformed
 
     private void TablaClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClienteMouseClicked
      int fila= TablaCliente.rowAtPoint(evt.getPoint());
@@ -1338,88 +1336,164 @@ public void ListarProductos() {
         Excel.reporte();
     }//GEN-LAST:event_btnExcelStockActionPerformed
 
-    private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-          if(!"".equals(txtCodigoVenta.getText())){
-             String cod = txtCodigoVenta.getText();
-             pro = proDAO.BuscarPro(cod);
-             if(pro.getNombre()!=null){
-                txtNomProVentanva.setText(""+pro.getNombre());
-                txtPrecioVentanva.setText(String.valueOf(""+pro.getPreventa()));
-                txtStockVentanva.setText(String.valueOf(""+pro.getStock()));
-                txtCantidadVentanva.requestFocus();
-             }else{
-                LimpiarNvaVenta();
-                txtCodigoVenta.requestFocus();
-             } 
-            }else{
-            JOptionPane.showMessageDialog(null, "Por favor ingresa un código");}
-          }
-
-    }//GEN-LAST:event_txtCodigoVentaKeyPressed
-
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void txtCantidadVentanvaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadVentanvaKeyPressed
+    private void txtDireVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDireVentanvaActionPerformed
         // TODO add your handling code here:
-         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-        if(!"".equals(txtCantidadVentanva.getText())) {
-            try {
-                String cod = txtCodigoVenta.getText();
-                String producto = txtNomProVentanva.getText();
-                int cant = Integer.parseInt(txtCantidadVentanva.getText());
-                double precio = Double.parseDouble(txtPrecioVentanva.getText());
-                double total = cant * precio;
-                int stock = Integer.parseInt(txtStockVentanva.getText());
-                
-                if(stock >= cant) {
-                    modelo = (DefaultTableModel) TableVentanva.getModel();
-                    
-                    for(int i = 0; i < modelo.getRowCount(); i++) {
-                        if(modelo.getValueAt(i, 1).equals(producto)) {
-                            JOptionPane.showMessageDialog(null, "El producto ya está registrado");
-                            return;
-                        }
-                    }
-                    
-                    item = item + 1;
-                    ArrayList<Object> lista = new ArrayList<>();
-                    lista.add(item);
-                    lista.add(cod);
-                    lista.add(producto);
-                    lista.add(cant);
-                    lista.add(precio);
-                    lista.add(total);
+    }//GEN-LAST:event_txtDireVentanvaActionPerformed
 
-                    Object[] O = new Object[5];
-                    O[0] = lista.get(1);
-                    O[1] = lista.get(2);
-                    O[2] = lista.get(3);
-                    O[3] = lista.get(4);
-                    O[4] = lista.get(5);
-                    
-                    modelo.addRow(O);
-                    TableVentanva.setModel(modelo);
-                    TotalPagar();
+    private void txtTelefonoClienteVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteVentanvaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefonoClienteVentanvaActionPerformed
+
+    private void txtDNIVentanvaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDNIVentanvaKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!"".equals(txtDNIVentanva.getText())) {
+                try {
+                    int dni = Integer.parseInt(txtDNIVentanva.getText());
+                    cliente cl = cliente.BuscarCliente(dni);
+                    if (cl != null && cl.getNombre() != null) {
+                        txtNombreVentanva.setText(cl.getNombre());
+                        txtTelefonoClienteVentanva.setText(cl.getTelefono());
+                        txtDireVentanva.setText(cl.getDireccion());
+                        txtDNIVentanva.requestFocus();
+                    } else {
+                        //  LimpiarCliNvaVenta();
+                        txtDNIVentanva.requestFocus();
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Por favor ingrese un DNI válido.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor ingrese el DNI de un cliente.");
+            }
+        }
+    }//GEN-LAST:event_txtDNIVentanvaKeyPressed
+
+    private void txtDNIVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDNIVentanvaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDNIVentanvaActionPerformed
+
+    private void txtNombreVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreVentanvaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreVentanvaActionPerformed
+
+    private void btnImprimirVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirVentanvaActionPerformed
+        // TODO add your handling code here:
+        RegistrarVenta();
+    }//GEN-LAST:event_btnImprimirVentanvaActionPerformed
+
+    private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            if(!"".equals(txtCodigoVenta.getText())){
+                String cod = txtCodigoVenta.getText();
+                pro = proDAO.BuscarPro(cod);
+                if(pro.getNombre()!=null){
+                    txtNomProVentanva.setText(""+pro.getNombre());
+                    txtPrecioVentanva.setText(String.valueOf(""+pro.getPreventa()));
+                    txtStockVentanva.setText(String.valueOf(""+pro.getStock()));
+                    txtCantidadVentanva.requestFocus();
+                }else{
                     LimpiarNvaVenta();
                     txtCodigoVenta.requestFocus();
-                    
-                    // Actualizar el stock
-                    txtStockVentanva.setText(String.valueOf(stock - cant));
-                } else {
-                    JOptionPane.showMessageDialog(null, "Stock no disponible");
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Ingrese valores válidos");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Ingrese cantidad");
+            }else{
+                JOptionPane.showMessageDialog(null, "Por favor ingresa un código");}
         }
-    }
+    }//GEN-LAST:event_txtCodigoVentaKeyPressed
+
+    private void txtCantidadVentanvaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadVentanvaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if(!"".equals(txtCantidadVentanva.getText())) {
+                try {
+                    String cod = txtCodigoVenta.getText();
+                    String producto = txtNomProVentanva.getText();
+                    int cant = Integer.parseInt(txtCantidadVentanva.getText());
+                    double precio = Double.parseDouble(txtPrecioVentanva.getText());
+                    double total = cant * precio;
+                    int stock = Integer.parseInt(txtStockVentanva.getText());
+
+                    if(stock >= cant) {
+                        modelo = (DefaultTableModel) TableVentanva.getModel();
+
+                        for(int i = 0; i < modelo.getRowCount(); i++) {
+                            if(modelo.getValueAt(i, 1).equals(producto)) {
+                                JOptionPane.showMessageDialog(null, "El producto ya está registrado");
+                                return;
+                            }
+                        }
+
+                        item = item + 1;
+                        ArrayList<Object> lista = new ArrayList<>();
+                        lista.add(item);
+                        lista.add(cod);
+                        lista.add(producto);
+                        lista.add(cant);
+                        lista.add(precio);
+                        lista.add(total);
+
+                        Object[] O = new Object[5];
+                        O[0] = lista.get(1);
+                        O[1] = lista.get(2);
+                        O[2] = lista.get(3);
+                        O[3] = lista.get(4);
+                        O[4] = lista.get(5);
+
+                        modelo.addRow(O);
+                        TableVentanva.setModel(modelo);
+                        TotalPagar();
+                        LimpiarNvaVenta();
+                        txtCodigoVenta.requestFocus();
+
+                        // Actualizar el stock
+                        txtStockVentanva.setText(String.valueOf(stock - cant));
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Stock no disponible");
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Ingrese valores válidos");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Ingrese cantidad");
+            }
+        }
     }//GEN-LAST:event_txtCantidadVentanvaKeyPressed
+
+    private void txtPrecioVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioVentanvaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioVentanvaActionPerformed
+
+    private void btnEliminarVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarVentanvaActionPerformed
+        // Obtener el índice de la fila seleccionada
+        int filaSeleccionada = TableVentanva.getSelectedRow();
+
+        // Verificar si se ha seleccionado una fila
+        if (filaSeleccionada == -1) {
+            // No se ha seleccionado ninguna fila, mostrar un mensaje
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila para eliminar.");
+        } else {
+            // Se ha seleccionado una fila, proceder a eliminarla
+            int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea eliminar la venta seleccionada?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                // Eliminar la fila seleccionada del modelo de la tabla
+                DefaultTableModel modelo = (DefaultTableModel) TableVentanva.getModel();
+                modelo.removeRow(filaSeleccionada);
+
+                // Mostrar un mensaje de éxito
+                JOptionPane.showMessageDialog(null, "Venta eliminada correctamente.");
+
+                // Actualizar el total a pagar
+                TotalPagar();
+                txtCodigoVenta.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarVentanvaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1505,6 +1579,7 @@ public void ListarProductos() {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1531,10 +1606,10 @@ public void ListarProductos() {
     private javax.swing.JTextField txtCodigoVenta;
     private javax.swing.JTextField txtDNICliente;
     private javax.swing.JTextField txtDNIVentanva;
+    private javax.swing.JTextField txtDireVentanva;
     private javax.swing.JTextField txtDireccionCliente;
     private javax.swing.JTextField txtIDStock;
     private javax.swing.JTextField txtIdCliente;
-    private javax.swing.JTextField txtIdPro;
     private javax.swing.JTextField txtIdVentas;
     private javax.swing.JTextField txtNomProVentanva;
     private javax.swing.JTextField txtNombreCliente;
@@ -1564,5 +1639,31 @@ private void LimpiarNvaVenta(){
    txtPrecioVentanva.setText("");
    txtStockVentanva.setText("");
 }
+private void LimpiarCliNvaVenta(){
+   txtDNIVentanva.setText("");
+   txtNombreVentanva.setText("");
+   txtTelefonoClienteVentanva.setText("");
+   txtDireVentanva.setText("");
+}
+private void RegistrarVenta() {
+    try {
+        String cliente = txtNombreVentanva.getText();    
+        double monto = Totalpagar;
+        Venta v = new Venta();
+        v.setCliente(cliente);
+        v.setTotal(monto);
+        VentaDAO ventaDAO = new VentaDAO();
+        ventaDAO.RegistrarVenta(v);
+        JOptionPane.showMessageDialog(null, "Venta registrada con éxito");
+    } catch (NumberFormatException e) {
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Ocurrió un error al registrar la venta: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
+}
 
 }
+
+
+
+
+
