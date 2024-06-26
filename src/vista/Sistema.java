@@ -19,7 +19,8 @@ import reportes.Excel;
  * @author Mariano Cuevas
  */
 public class Sistema extends javax.swing.JFrame {
-
+    int item;
+    double Totalpagar= 0.00;
     cliente cl = new cliente();
     ClienteDAO cliente = new ClienteDAO();
     Productos pro = new Productos();
@@ -128,7 +129,7 @@ public void ListarProductos() {
         jLabel20 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        labelTotal = new javax.swing.JLabel();
+        LabelTotal = new javax.swing.JLabel();
         txtTelefonoClienteVentanva = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtIdPro = new javax.swing.JTextField();
@@ -306,7 +307,7 @@ public void ListarProductos() {
 
             },
             new String [] {
-                "Codigo", "Cantidad", "Precio", "Stock"
+                "Codigo", "Producto", "Precio", "Cantidad", "Total"
             }
         ));
         jScrollPane1.setViewportView(TableVentanva);
@@ -314,6 +315,8 @@ public void ListarProductos() {
             TableVentanva.getColumnModel().getColumn(0).setPreferredWidth(50);
             TableVentanva.getColumnModel().getColumn(1).setPreferredWidth(50);
             TableVentanva.getColumnModel().getColumn(2).setPreferredWidth(50);
+            TableVentanva.getColumnModel().getColumn(3).setPreferredWidth(30);
+            TableVentanva.getColumnModel().getColumn(4).setPreferredWidth(30);
         }
 
         btnEliminarVentanva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/eliminar.png"))); // NOI18N
@@ -326,6 +329,12 @@ public void ListarProductos() {
         txtPrecioVentanva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPrecioVentanvaActionPerformed(evt);
+            }
+        });
+
+        txtCantidadVentanva.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCantidadVentanvaKeyPressed(evt);
             }
         });
 
@@ -361,7 +370,7 @@ public void ListarProductos() {
 
         jLabel6.setText("Total a pagar : ");
 
-        labelTotal.setText("...................");
+        LabelTotal.setText("...................");
 
         txtTelefonoClienteVentanva.setEditable(false);
         txtTelefonoClienteVentanva.addActionListener(new java.awt.event.ActionListener() {
@@ -403,7 +412,7 @@ public void ListarProductos() {
                                         .addComponent(btnImprimirVentanva, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel6))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(labelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(LabelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
@@ -473,7 +482,7 @@ public void ListarProductos() {
                         .addGap(28, 28, 28)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(labelTotal))))
+                            .addComponent(LabelTotal))))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
@@ -1340,9 +1349,7 @@ public void ListarProductos() {
                 txtStockVentanva.setText(String.valueOf(""+pro.getStock()));
                 txtCantidadVentanva.requestFocus();
              }else{
-                txtNomProVentanva.setText("");
-                txtPrecioVentanva.setText("");
-                txtStockVentanva.setText("");
+                LimpiarNvaVenta();
                 txtCodigoVenta.requestFocus();
              } 
             }else{
@@ -1355,6 +1362,64 @@ public void ListarProductos() {
         // TODO add your handling code here:
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void txtCantidadVentanvaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadVentanvaKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if(!"".equals(txtCantidadVentanva.getText())) {
+            try {
+                String cod = txtCodigoVenta.getText();
+                String producto = txtNomProVentanva.getText();
+                int cant = Integer.parseInt(txtCantidadVentanva.getText());
+                double precio = Double.parseDouble(txtPrecioVentanva.getText());
+                double total = cant * precio;
+                int stock = Integer.parseInt(txtStockVentanva.getText());
+                
+                if(stock >= cant) {
+                    modelo = (DefaultTableModel) TableVentanva.getModel();
+                    
+                    for(int i = 0; i < modelo.getRowCount(); i++) {
+                        if(modelo.getValueAt(i, 1).equals(producto)) {
+                            JOptionPane.showMessageDialog(null, "El producto ya está registrado");
+                            return;
+                        }
+                    }
+                    
+                    item = item + 1;
+                    ArrayList<Object> lista = new ArrayList<>();
+                    lista.add(item);
+                    lista.add(cod);
+                    lista.add(producto);
+                    lista.add(cant);
+                    lista.add(precio);
+                    lista.add(total);
+
+                    Object[] O = new Object[5];
+                    O[0] = lista.get(1);
+                    O[1] = lista.get(2);
+                    O[2] = lista.get(3);
+                    O[3] = lista.get(4);
+                    O[4] = lista.get(5);
+                    
+                    modelo.addRow(O);
+                    TableVentanva.setModel(modelo);
+                    TotalPagar();
+                    LimpiarNvaVenta();
+                    txtCodigoVenta.requestFocus();
+                    
+                    // Actualizar el stock
+                    txtStockVentanva.setText(String.valueOf(stock - cant));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Stock no disponible");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingrese valores válidos");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese cantidad");
+        }
+    }
+    }//GEN-LAST:event_txtCantidadVentanvaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1392,6 +1457,7 @@ public void ListarProductos() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LabelTotal;
     private javax.swing.JTable TablaCliente;
     private javax.swing.JTable TableStock;
     private javax.swing.JTable TableVentanva;
@@ -1460,7 +1526,6 @@ public void ListarProductos() {
     private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JLabel labelTotal;
     private javax.swing.JTextField txtCantidadVentanva;
     private javax.swing.JTextField txtCodigoStock;
     private javax.swing.JTextField txtCodigoVenta;
@@ -1483,5 +1548,21 @@ public void ListarProductos() {
     private javax.swing.JTextField txtTelefonoCliente;
     private javax.swing.JTextField txtTelefonoClienteVentanva;
     // End of variables declaration//GEN-END:variables
+private void TotalPagar() {
+    Totalpagar = 0.00;
+    int numFila = TableVentanva.getRowCount();
+    for (int i = 0; i < numFila; i++) {
+        double cal = Double.parseDouble(String.valueOf(TableVentanva.getModel().getValueAt(i, 4)));
+        Totalpagar = Totalpagar + cal;
+    }
+    LabelTotal.setText(String.format("%.2f", Totalpagar));
+}
+private void LimpiarNvaVenta(){
+   txtCodigoVenta.setText("");
+   txtNomProVentanva.setText("");
+   txtCantidadVentanva.setText("");
+   txtPrecioVentanva.setText("");
+   txtStockVentanva.setText("");
+}
 
 }
