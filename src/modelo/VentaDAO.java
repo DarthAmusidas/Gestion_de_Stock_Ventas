@@ -42,4 +42,29 @@ public class VentaDAO {
             }
         }
     }
+   public int RegistrarDetalle(Detalle dv) {
+    String sql = "INSERT INTO detalles (codigo, cantidad, precio) VALUES (?, ?, ?)";
+    Connection con = null;
+    PreparedStatement ps = null;
+    conexion cn = new conexion();
+    int r = 0; 
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, dv.getCodigo());
+            ps.setInt(2, dv.getCantidad());
+            ps.setDouble(3, dv.getPrecio());
+            r = ps.executeUpdate(); 
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    return r;  
+}
 }

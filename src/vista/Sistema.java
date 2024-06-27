@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.ClienteDAO;
+import modelo.Detalle;
 import modelo.Productos;
 import modelo.ProductosDAO;
 import modelo.Venta;
@@ -28,7 +29,8 @@ public class Sistema extends javax.swing.JFrame {
     Productos pro = new Productos();
     ProductosDAO proDAO = new ProductosDAO();
     Venta venta = new Venta();
-    VentaDAO ventaDAO= new VentaDAO();
+    VentaDAO ventaDAO = new VentaDAO();
+    Detalle Dv = new Detalle();
     DefaultTableModel modelo = new DefaultTableModel();
     public Sistema() {
         initComponents();
@@ -1385,6 +1387,7 @@ public void ListarProductos() {
     private void btnImprimirVentanvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirVentanvaActionPerformed
         // TODO add your handling code here:
         RegistrarVenta();
+        RegistrarDetalle();
     }//GEN-LAST:event_btnImprimirVentanvaActionPerformed
 
     private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
@@ -1660,7 +1663,18 @@ private void RegistrarVenta() {
         JOptionPane.showMessageDialog(null, "Ocurrió un error al registrar la venta: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 }
 }
-
+private void RegistrarDetalle(){
+    for (int i=0; i<TableVentanva.getRowCount(); i++){
+       String cod = TableVentanva.getValueAt(i, 0).toString();
+        int cant = Integer.parseInt(TableVentanva.getValueAt(i, 2).toString());
+        double precio = Double.parseDouble(TableVentanva.getValueAt(i, 3).toString());
+        Detalle Dv = new Detalle();
+        Dv.setCodigo(cod);
+        Dv.setCantidad(cant);
+        Dv.setPrecio(precio);
+        ventaDAO.RegistrarDetalle(Dv);
+    } 
+}
 }
 
 
