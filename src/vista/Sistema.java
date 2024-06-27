@@ -32,10 +32,13 @@ public class Sistema extends javax.swing.JFrame {
     VentaDAO ventaDAO = new VentaDAO();
     Detalle Dv = new Detalle();
     DefaultTableModel modelo = new DefaultTableModel();
+    
     public Sistema() {
         initComponents();
         this.setLocationRelativeTo(null);
         txtIdCliente.setVisible(false);
+        txtIDStock.setVisible(false);
+        txtIdVentas.setVisible(false);
     }
     //metodos varios:
 public void ListarCliente(){
@@ -1388,6 +1391,8 @@ public void ListarProductos() {
         // TODO add your handling code here:
         RegistrarVenta();
         RegistrarDetalle();
+        ActualizarStock();
+        LimpiarTableVenta();
     }//GEN-LAST:event_btnImprimirVentanvaActionPerformed
 
     private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
@@ -1665,16 +1670,35 @@ private void RegistrarVenta() {
 }
 private void RegistrarDetalle(){
     for (int i=0; i<TableVentanva.getRowCount(); i++){
-       String cod = TableVentanva.getValueAt(i, 0).toString();
+        String cod = TableVentanva.getValueAt(i, 0).toString();
         int cant = Integer.parseInt(TableVentanva.getValueAt(i, 2).toString());
+        String producto = TableVentanva.getValueAt(i, 1).toString();
         double precio = Double.parseDouble(TableVentanva.getValueAt(i, 3).toString());
         Detalle Dv = new Detalle();
         Dv.setCodigo(cod);
         Dv.setCantidad(cant);
+        Dv.setProducto(producto);
         Dv.setPrecio(precio);
         ventaDAO.RegistrarDetalle(Dv);
     } 
 }
+private void ActualizarStock(){
+  for (int i=0; i<TableVentanva.getRowCount(); i++){
+        String cod = TableVentanva.getValueAt(i, 0).toString();
+        int cant = Integer.parseInt(TableVentanva.getValueAt(i, 2).toString());
+        pro = proDAO.BuscarPro(cod);
+        int StockActual = pro.getStock() - cant;
+        ventaDAO.ActualizarStock(StockActual, cod);
+    } 
+}
+private void LimpiarTableVenta() {
+    DefaultTableModel tmp = (DefaultTableModel) TableVentanva.getModel();
+    int fila = TableVentanva.getRowCount();
+    for (int i = fila - 1; i >= 0; i--) {
+        tmp.removeRow(0);
+    }
+}
+
 }
 
 

@@ -11,17 +11,20 @@ package modelo;
 public class Detalle {
    int id;	
    String codigo;
-   int cantidad;	
+   int cantidad;
+   String producto;
    double precio;	
+    String getProducto;
    
  //constructor vacio
 public Detalle() {
     }
    //constructores
-    public Detalle(int id, String codigo, int cantidad, double precio) {
+    public Detalle(int id, String codigo, int cantidad, String producto, double precio) {
         this.id = id;
         this.codigo = codigo;
         this.cantidad = cantidad;
+        this.producto = producto;
         this.precio = precio;
     }
 //Getters y Setters
@@ -41,5 +44,9 @@ public Detalle() {
         return precio;}
     public void setPrecio(double precio) {
         this.precio = precio;}
+    public String getProducto() {
+        return producto;}
+    public void setProducto(String producto) {
+        this.producto = producto;}
     
 }

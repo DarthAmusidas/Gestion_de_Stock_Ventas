@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * 
  */
 public class VentaDAO {
-    public boolean RegistrarVenta(Venta v) {
+   public boolean RegistrarVenta(Venta v) {
         Connection con = null;
         PreparedStatement ps = null;
         conexion cn = new conexion();
@@ -43,7 +43,7 @@ public class VentaDAO {
         }
     }
    public int RegistrarDetalle(Detalle dv) {
-    String sql = "INSERT INTO detalles (codigo, cantidad, precio) VALUES (?, ?, ?)";
+    String sql = "INSERT INTO detalles (codigo, cantidad, producto, precio) VALUES (?, ?, ?, ?)";
     Connection con = null;
     PreparedStatement ps = null;
     conexion cn = new conexion();
@@ -53,7 +53,8 @@ public class VentaDAO {
             ps = con.prepareStatement(sql);
             ps.setString(1, dv.getCodigo());
             ps.setInt(2, dv.getCantidad());
-            ps.setDouble(3, dv.getPrecio());
+            ps.setString(3, dv.getProducto());
+            ps.setDouble(4, dv.getPrecio());
             r = ps.executeUpdate(); 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -67,4 +68,29 @@ public class VentaDAO {
     }
     return r;  
 }
+public boolean ActualizarStock(int cant, String cod) {
+    String sql = "UPDATE stock SET stock = ? WHERE codigo = ?";
+    Connection con = null;
+    PreparedStatement ps = null;
+    conexion cn = new conexion(); 
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, cant);
+        ps.setString(2, cod);
+        ps.executeUpdate(); 
+        return true;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}     
 }
