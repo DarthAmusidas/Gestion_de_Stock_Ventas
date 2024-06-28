@@ -4,8 +4,27 @@
  */
 package vista;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import static com.itextpdf.text.pdf.PdfName.FONT;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -39,6 +58,7 @@ public class Sistema extends javax.swing.JFrame {
         txtIdCliente.setVisible(false);
         txtIDStock.setVisible(false);
         txtIdVentas.setVisible(false);
+        
     }
     //metodos varios:
 public void ListarCliente(){
@@ -317,15 +337,15 @@ public void ListarProductos() {
 
             },
             new String [] {
-                "Codigo", "Producto", "Precio", "Cantidad", "Total"
+                "Codigo", "Producto", "Cantidad", "Precio", "Total"
             }
         ));
         jScrollPane1.setViewportView(TableVentanva);
         if (TableVentanva.getColumnModel().getColumnCount() > 0) {
             TableVentanva.getColumnModel().getColumn(0).setPreferredWidth(50);
             TableVentanva.getColumnModel().getColumn(1).setPreferredWidth(50);
-            TableVentanva.getColumnModel().getColumn(2).setPreferredWidth(50);
-            TableVentanva.getColumnModel().getColumn(3).setPreferredWidth(30);
+            TableVentanva.getColumnModel().getColumn(2).setPreferredWidth(30);
+            TableVentanva.getColumnModel().getColumn(3).setPreferredWidth(50);
             TableVentanva.getColumnModel().getColumn(4).setPreferredWidth(30);
         }
 
@@ -1392,6 +1412,7 @@ public void ListarProductos() {
         RegistrarVenta();
         RegistrarDetalle();
         ActualizarStock();
+        pdf();
         LimpiarTableVenta();
     }//GEN-LAST:event_btnImprimirVentanvaActionPerformed
 
@@ -1697,6 +1718,123 @@ private void LimpiarTableVenta() {
     for (int i = fila - 1; i >= 0; i--) {
         tmp.removeRow(0);
     }
+}
+private void pdf(){
+    try{
+        Date date = new Date();
+        FileOutputStream archivo;
+        File file = new File("src/PDF/venta.pdf");
+        archivo = new FileOutputStream(file);
+        Document doc = new Document();
+        PdfWriter.getInstance(doc, archivo);
+        doc.open();
+        Image img = Image.getInstance("src/img/Logo copado.png");
+        Paragraph fecha = new Paragraph();
+        Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+        fecha.add(Chunk.NEWLINE);
+        fecha.add("Fecha: "+ new SimpleDateFormat("dd-MM-yy").format(date)+"\n\n");
+        PdfPTable Encabezado= new PdfPTable(4);
+        Encabezado.setWidthPercentage(100);
+        Encabezado.getDefaultCell().setBorder(0);
+        float [] ColumnaEncabezado = new float[]{20f,30f,70f,40f};
+        Encabezado.setWidths(ColumnaEncabezado);
+        Encabezado.setHorizontalAlignment(Element.ALIGN_CENTER);
+        Encabezado.addCell(img);
+        String dni="24746128";
+        String nomb="Atelier Susana Battoia";
+        String tel="2995352465";
+        String dire="Praga 444 Catriel Rio Negro";
+        Encabezado.addCell("");
+        Encabezado.addCell("DNI: " + dni + "\nNombre: " + nomb + "\nTelefono: " + tel + "\nDireccion: " + dire);
+        Encabezado.addCell(fecha);
+        doc.add(Encabezado);
+        Paragraph cli= new Paragraph();
+        cli.add(Chunk.NEWLINE);
+        cli.add("Datos de los clientes"+"\n\n");
+        doc.add(cli);
+        PdfPTable tablacli= new PdfPTable(4);
+        tablacli.setWidthPercentage(100);
+        tablacli.getDefaultCell().setBorder(0);
+        float [] Columnacli = new float[]{20f,30f,70f,40f};
+        tablacli.setWidths(Columnacli);
+        tablacli.setHorizontalAlignment(Element.ALIGN_LEFT);
+        PdfPCell cl1 = new PdfPCell (new Phrase("DNI", negrita));
+        PdfPCell cl2 = new PdfPCell (new Phrase("Nombre", negrita));
+        PdfPCell cl3 = new PdfPCell (new Phrase("Telefono", negrita));
+        PdfPCell cl4 = new PdfPCell (new Phrase("Direccion", negrita));
+        cl1.setBorder(0);
+        cl2.setBorder(0);
+        cl3.setBorder(0);
+        cl4.setBorder(0);
+        cl1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        cl2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        cl3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        cl4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        tablacli.addCell(cl1);
+        tablacli.addCell(cl2);
+        tablacli.addCell(cl3);
+        tablacli.addCell(cl4);
+        tablacli.addCell(txtDNIVentanva.getText());
+        tablacli.addCell(txtNombreVentanva.getText());
+        tablacli.addCell(txtTelefonoClienteVentanva.getText());
+        tablacli.addCell(txtDireVentanva.getText());
+        doc.add(tablacli);
+        //productos
+        PdfPTable tablapro = new PdfPTable(4);
+        tablapro.setWidthPercentage(100);
+        tablapro.getDefaultCell().setBorder(0);
+        float [] Columnapro = new float[]{20f,15f,15f,20f};
+        tablapro.setWidths(Columnapro);
+        tablapro.setHorizontalAlignment(Element.ALIGN_LEFT);
+        PdfPCell pro1 = new PdfPCell (new Phrase("Producto", negrita));
+        PdfPCell pro2 = new PdfPCell (new Phrase("Precio unidad", negrita));
+        PdfPCell pro3 = new PdfPCell (new Phrase("Cantidad", negrita));
+        PdfPCell pro4 = new PdfPCell (new Phrase("Precio total", negrita));
+        pro1.setBorder(0);
+        pro2.setBorder(0);
+        pro3.setBorder(0);
+        pro4.setBorder(0);
+        pro1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        pro2.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        pro3.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        pro4.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        tablapro.addCell(pro1);
+        tablapro.addCell(pro2);
+        tablapro.addCell(pro3);
+        tablapro.addCell(pro4);
+        for(int i=0; i<TableVentanva.getRowCount(); i++){
+        String producto = TableVentanva.getValueAt(i, 1).toString();
+        String precio = TableVentanva.getValueAt(i, 3).toString();
+        String cantidad= TableVentanva.getValueAt(i, 2).toString();
+        String total = TableVentanva.getValueAt(i, 4).toString();
+        tablapro.addCell(producto);
+        tablapro.addCell(precio);
+        tablapro.addCell(cantidad);
+        tablapro.addCell(total);
+        }
+          doc.add(tablapro);
+          Paragraph info = new Paragraph();
+          info.add(Chunk.NEWLINE);
+          info.add("Total a pagar: "+ Totalpagar);
+          info.setAlignment(Element.ALIGN_RIGHT);
+          doc.add(info);
+        /*  Paragraph firma = new Paragraph();
+          info.add(Chunk.NEWLINE);
+          info.add("Cancelacion y firma\n\n");
+          info.add("..........................");
+          info.setAlignment(Element.ALIGN_CENTER);
+          doc.add(info);
+          Paragraph Mensaje = new Paragraph();
+          info.add(Chunk.NEWLINE);
+          info.add("Gracias por su compra");
+          info.setAlignment(Element.ALIGN_CENTER);
+          doc.add(info);*/
+          doc.close();
+          archivo.close();
+          Desktop.getDesktop().open(file);
+}catch(DocumentException | IOException e){
+System.out.println(e.toString());
+}
 }
 
 }

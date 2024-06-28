@@ -384,8 +384,8 @@
                       <Table columnCount="5" rowCount="0">
                         <Column editable="true" title="Codigo" type="java.lang.Object"/>
                         <Column editable="true" title="Producto" type="java.lang.Object"/>
-                        <Column editable="true" title="Precio" type="java.lang.Object"/>
                         <Column editable="true" title="Cantidad" type="java.lang.Object"/>
+                        <Column editable="true" title="Precio" type="java.lang.Object"/>
                         <Column editable="true" title="Total" type="java.lang.Object"/>
                       </Table>
                     </Property>
@@ -401,12 +401,12 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
                           <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="true">
                           <Title/>
                           <Editor/>
                           <Renderer/>
