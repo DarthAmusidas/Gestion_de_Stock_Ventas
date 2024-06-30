@@ -1,9 +1,5 @@
 package reportes;
-/**
- *
- * @author Mariano Cuevas
- * 
- */
+
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;

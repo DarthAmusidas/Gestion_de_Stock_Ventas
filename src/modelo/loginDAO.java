@@ -3,16 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelo;
-/**
- *
- * @author Mariano Cuevas
- * 
- */
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ *
+ * @author Mariano Cuevas
+ */
 public class loginDAO {
     private Connection con;
     private PreparedStatement ps;

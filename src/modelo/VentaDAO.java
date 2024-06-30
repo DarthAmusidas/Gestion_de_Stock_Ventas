@@ -3,26 +3,51 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.SQLException;
 
 /**
  *
  * @author Mariano Cuevas
- * 
  */
 public class VentaDAO {
-   public boolean RegistrarVenta(Venta v) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        conexion cn = new conexion();
-        String sql = "INSERT INTO ventas ( cliente, total) VALUES (?,?)";
-        
+  conexion cn = new conexion(); 
+  Connection con;
+  PreparedStatement ps;
+  ResultSet rs; 
+//metodos:  
+  public int IdVenta() {
+    int id = 0;
+    String sql = "SELECT MAX(id) FROM ventas";
+    
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            id = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();  
+        }
+    }
+    
+    return id;
+}
+  public boolean RegistrarVenta(Venta v) {
+        String sql = "INSERT INTO ventas ( cliente, total) VALUES (?,?)";        
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
@@ -42,11 +67,8 @@ public class VentaDAO {
             }
         }
     }
-   public int RegistrarDetalle(Detalle dv) {
-    String sql = "INSERT INTO detalles (codigo, cantidad, producto, precio) VALUES (?, ?, ?, ?)";
-    Connection con = null;
-    PreparedStatement ps = null;
-    conexion cn = new conexion();
+  public int RegistrarDetalle(Detalle dv) {
+    String sql = "INSERT INTO detalles (codigo, cantidad, producto, precio, id_venta) VALUES (?, ?, ?, ?,?)";
     int r = 0; 
         try {
             con = cn.getConnection();
@@ -55,6 +77,7 @@ public class VentaDAO {
             ps.setInt(2, dv.getCantidad());
             ps.setString(3, dv.getProducto());
             ps.setDouble(4, dv.getPrecio());
+            ps.setInt(5, dv.getId());
             r = ps.executeUpdate(); 
     } catch (SQLException e) {
         e.printStackTrace();
@@ -68,11 +91,8 @@ public class VentaDAO {
     }
     return r;  
 }
-public boolean ActualizarStock(int cant, String cod) {
+  public boolean ActualizarStock(int cant, String cod) {
     String sql = "UPDATE stock SET stock = ? WHERE codigo = ?";
-    Connection con = null;
-    PreparedStatement ps = null;
-    conexion cn = new conexion(); 
     try {
         con = cn.getConnection();
         ps = con.prepareStatement(sql);
@@ -92,5 +112,32 @@ public boolean ActualizarStock(int cant, String cod) {
             return false;
         }
     }
-}     
+} 
+  public List<Venta> listarVenta() {
+        List<Venta> listaVen = new ArrayList<>(); 
+        String sql = "SELECT * FROM ventas";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Venta ven = new Venta();
+                ven.setId(rs.getInt("id"));
+                ven.setCliente(rs.getString("cliente"));
+                ven.setTotal(rs.getDouble("Total"));
+                listaVen.add(ven);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listaVen;
+    }  
 }

@@ -14,7 +14,6 @@ import java.util.List;
  * @author Mariano Cuevas
  */
 public class ClienteDAO {
-
     conexion cn = new conexion(); 
     Connection con;
     PreparedStatement ps;
@@ -25,9 +24,9 @@ public class ClienteDAO {
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setLong(1, c1.getDni()); 
+            ps.setLong(1, c1.getDni()); // Usa long para el DNI
             ps.setString(2, c1.getNombre());
-            ps.setString(3, c1.getTelefono()); 
+            ps.setString(3, c1.getTelefono()); // Usa String para el teléfono
             ps.setString(4, c1.getDireccion());
             ps.execute();
             return true; // Retorna true si la operación es exitosa
@@ -96,25 +95,35 @@ public class ClienteDAO {
     }
 }
     public boolean ModificarCliente(cliente cl) {
-   String sql = "UPDATE clientes SET dni=?, nombre=?, telefono=?, direccion=? WHERE id=?";
+    // Define la consulta SQL para actualizar un cliente según su ID.
+    String sql = "UPDATE clientes SET dni=?, nombre=?, telefono=?, direccion=? WHERE id=?";
     try {
+        // Obtiene la conexión a la base de datos.
         con = cn.getConnection();
+        // Prepara la consulta SQL con los parámetros.
         ps = con.prepareStatement(sql);
+        // Establece los valores de los parámetros en la consulta preparada.
         ps.setInt(1, cl.getDni());
         ps.setString(2, cl.getNombre());
         ps.setString(3, cl.getTelefono());
         ps.setString(4, cl.getDireccion());
         ps.setInt(5, cl.getId());
-        ps.execute();   
+        // Ejecuta la consulta SQL.
+        ps.execute();
+        // Si la ejecución es exitosa, retorna true.
         return true;
     } catch (SQLException e) {
+        // Si ocurre una excepción SQL, imprime el error y retorna false.
         System.out.println(e.toString());
         return false;
     } finally {
         try {
+            // Cierra el PreparedStatement si no es nulo.
             if (ps != null) ps.close();
+            // Cierra la conexión si no es nula.
             if (con != null) con.close();
         } catch (SQLException ex) {
+            // Si ocurre una excepción al cerrar recursos, imprime el error.
             System.out.println(ex.toString());
         }
     }
@@ -147,7 +156,5 @@ public class ClienteDAO {
     }
     return cl;
 }
-
-    }
-
+} 
   
